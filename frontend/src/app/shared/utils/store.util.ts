@@ -31,7 +31,8 @@ export const isWineTimeWineDepartment = (): boolean => {
 
 export const isGoodWineWineDepartment = (): boolean => {
   return window.location.host.includes(HOST.GOOD_WINE)
-    && (window.location.pathname.includes('vino')
+    && (window.location.pathname === '/'
+    || window.location.pathname.includes('vino')
     || window.location.pathname.includes('igristye'));
 };
 
