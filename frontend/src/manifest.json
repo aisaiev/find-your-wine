@@ -4,7 +4,7 @@
   "short_name": "Find Your Wine 🍷",
   "description": "The easiest way to find your wine in the different stores. It shows Vivino score on shop pages.",
   "author": "Anton Isaiev",
-  "version": "1.4",
+  "version": "1.5",
   "permissions": [
     "tabs"
   ],
