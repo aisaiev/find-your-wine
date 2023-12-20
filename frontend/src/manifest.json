@@ -1,0 +1,20 @@
+{
+  "name": "Find Your Wine 🍷",
+  "version": "1.0",
+  "description": "The easiest way to find your wine in the different stores. It shows Vivino score on shop pages.",
+  "manifest_version": 3,
+  "permissions": ["tabs"],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://auchan.zakaz.ua/*", "*://winetime.com.ua/*", "*://goodwine.com.ua/*", "*://okwine.ua/*", "*://rozetka.com.ua/*"],
+      "js": ["content-script.js", "runtime.js"]
+    }
+  ],
+  "icons": {
+    "128": "assets/img/icon.png"
+  }
+}
