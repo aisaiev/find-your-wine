@@ -4,7 +4,7 @@ import { catchError, map } from 'rxjs/operators';
 import { IWineRating } from '../model/wine-rating.model';
 
 export class VivinoService {
-  private resourceUrl = 'http://localhost:3002/api/wine';
+  private resourceUrl = 'https://find-your-wine.aisaiev.net/api/wine';
 
   public getWineRating(wineName: string): Observable<IWineRating> {
     return ajax.get(`${this.resourceUrl}/rating?name=${wineName}`).pipe(
