@@ -42,7 +42,7 @@ const getRating = (wineItem: Element): Observable<IWineRating> => {
 
 const addRating = (wineItem: Element, wineRating: IWineRating): void => {
   if (!wineItem.querySelector(`.${VivinoBadgeRatingClass}`)) {
-    const item = wineItem.querySelector('div[class~="goods-tile__actions"]');
+    const item = wineItem.querySelector('.goods-tile__picture');
     const wineRatingBadge = createRozetkaWineRatingBadge(wineRating);
     item.appendChild(wineRatingBadge);
   }

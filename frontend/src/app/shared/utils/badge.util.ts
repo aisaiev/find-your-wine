@@ -11,18 +11,21 @@ const getBadgeColor = (score: number): string => {
 
 const getBadgeHtml = (wineRating: IWineRating): string => {
   return `
-  <svg viewBox="0 0 36 36" style="height: 30px; width: 30px; stroke: ${getBadgeColor(wineRating.score)};">
-    <path style="fill: none; stroke: #eee; stroke-width: 3.8;"
-      d="M18 2.0845
-        a 15.9155 15.9155 0 0 1 0 31.831
-        a 15.9155 15.9155 0 0 1 0 -31.831"></path>
-    <path style="fill: none; stroke-width: 2.8; stroke-linecap: round;"
-      stroke-dasharray="${getBadgePercentage(wineRating.score)}, 100"
-      d="M18 2.0845
-        a 15.9155 15.9155 0 0 1 0 31.831
-        a 15.9155 15.9155 0 0 1 0 -31.831"></path>
-    <text x="18" y="23" style="font-size: 14px; stroke: #312A29; text-anchor: middle;">${wineRating.score}</text>
-  </svg>`;
+  <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 5px;">
+    <svg viewBox="0 0 36 36" style="height: 30px; width: 30px; stroke: ${getBadgeColor(wineRating.score)};">
+      <path style="fill: none; stroke: #eee; stroke-width: 3.8;"
+        d="M18 2.0845
+          a 15.9155 15.9155 0 0 1 0 31.831
+          a 15.9155 15.9155 0 0 1 0 -31.831"></path>
+      <path style="fill: none; stroke-width: 2.8; stroke-linecap: round;"
+        stroke-dasharray="${getBadgePercentage(wineRating.score)}, 100"
+        d="M18 2.0845
+          a 15.9155 15.9155 0 0 1 0 31.831
+          a 15.9155 15.9155 0 0 1 0 -31.831"></path>
+      <text x="18" y="23" style="font-size: 14px; stroke: #312A29; text-anchor: middle;">${wineRating.score}</text>
+    </svg>
+    <span style="font-size: 12px; color: #312A29; text-align: center;">${wineRating.reviewsCount} reviews</span>
+  </div>`;
 };
 
 export const createAuchanWineRatingBadge = (wineRating: IWineRating): Element => {
@@ -48,9 +51,9 @@ export const createWineTimeWineRatingBadge = (wineRating: IWineRating): Element 
   badge.title = `${wineRating.reviewsCount} reviews in Vivino`;
   badge.classList.add(VivinoBadgeRatingClass);
   badge.style.position = 'absolute';
-  badge.style.right = '0px';
-  badge.style.bottom = '0px';
-  badge.style.height = '30px';
+  badge.style.right = '10px';
+  badge.style.top = '150px';
+  badge.style.zIndex = '100';
   badge.style.cursor = 'pointer';
   badge.innerHTML = getBadgeHtml(wineRating);
   badge.addEventListener('click', (event: MouseEvent) => {
@@ -67,8 +70,7 @@ export const createGoodWineWineRatingBadge = (wineRating: IWineRating): Element 
   badge.classList.add(VivinoBadgeRatingClass);
   badge.style.position = 'absolute';
   badge.style.right = '0px';
-  badge.style.top = '0px';
-  badge.style.height = '30px';
+  badge.style.bottom = '5px';
   badge.style.cursor = 'pointer';
   badge.innerHTML = getBadgeHtml(wineRating);
   badge.addEventListener('click', (event: MouseEvent) => {
@@ -86,7 +88,6 @@ export const createOkWineWineRatingBadge = (wineRating: IWineRating): Element =>
   badge.style.position = 'absolute';
   badge.style.right = '15px';
   badge.style.bottom = '0px';
-  badge.style.height = '30px';
   badge.style.cursor = 'pointer';
   badge.innerHTML = getBadgeHtml(wineRating);
   badge.addEventListener('click', (event: MouseEvent) => {
@@ -101,8 +102,9 @@ export const createRozetkaWineRatingBadge = (wineRating: IWineRating): Element =
   const badge = document.createElement('div');
   badge.title = `${wineRating.reviewsCount} reviews in Vivino`;
   badge.classList.add(VivinoBadgeRatingClass);
-  badge.style.marginTop = '10px';
-  badge.style.height = '30px';
+  badge.style.position = 'absolute';
+  badge.style.right = '0px';
+  badge.style.bottom = '0px';
   badge.style.cursor = 'pointer';
   badge.innerHTML = getBadgeHtml(wineRating);
   badge.addEventListener('click', (event: MouseEvent) => {
