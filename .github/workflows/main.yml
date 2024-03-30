@@ -7,7 +7,7 @@ jobs:
     runs-on: self-hosted
     environment: development
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - run: |
           docker stop $(docker ps -q --filter ancestor=find-your-wine) || true && docker rm --force find-your-wine || true && docker rmi --force find-your-wine || true
           docker build . -t find-your-wine --progress=plain
