@@ -1,6 +1,6 @@
 import { EMPTY, from, Observable, of, zip } from 'rxjs';
 import { concatMap, delay, tap } from 'rxjs/operators';
-import { IWineRating } from '../model/wine-rating.model';
+import { WineRating } from '../models/types.model';
 import { getWineRating } from '../service/message.service';
 import { createWineTimeWineRatingBadge } from '../utils/badge.util';
 import { isWineTimeWineDepartment } from '../utils/store.util';
@@ -39,13 +39,13 @@ const getWineListItems = (): Element[] => {
   return [...Array.from(document.querySelectorAll('.j-col-12-xs.j-col-6-sm.j-col-4-md.j-col-3-bg'))];
 };
 
-const getRating = (wineItem: Element): Observable<IWineRating> => {
+const getRating = (wineItem: Element): Observable<WineRating> => {
   const wineTitle = wineItem.querySelector('.product-micro--title').textContent;
   const wineName = getWineName(wineTitle as string);
   return wineName ? getWineRating(wineName) : EMPTY;
 };
 
-const addRating = (wineItem: Element, wineRating: IWineRating): void => {
+const addRating = (wineItem: Element, wineRating: WineRating): void => {
   if (!wineItem.querySelector(`.${VivinoBadgeRatingClass}`)) {
     const item = wineItem.querySelector('.product-micro--image');
     const wineRatingBadge = createWineTimeWineRatingBadge(wineRating);

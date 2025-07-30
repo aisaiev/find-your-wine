@@ -1,5 +1,5 @@
 import { Host, MessageType, TabStatus } from './app/app.constants';
-import { IMessage } from './app/shared/model/message.model';
+import { Message } from './app/shared/models/types.model';
 
 function initialize(): void {
   chrome.tabs.onUpdated.addListener(tabsUpdatedListener);
@@ -7,31 +7,19 @@ function initialize(): void {
 
 function tabsUpdatedListener(tabId: number, changeInfo: chrome.tabs.TabChangeInfo, tab: chrome.tabs.Tab): void {
   if (changeInfo.status === TabStatus.Complete) {
-    if (tab.url.includes(Host.Auchan)) {
-      sendMessageToContent(tabId, {
-        type: MessageType.AuchanPageChanged,
-      });
-    } else if (tab.url.includes(Host.WineTime)) {
-      sendMessageToContent(tabId, {
-        type: MessageType.WineTimePageChanged,
-      });
-    } else if (tab.url.includes(Host.GoodWine)) {
-      sendMessageToContent(tabId, {
-        type: MessageType.GoodWinePageChanged,
-      });
-    } else if (tab.url.includes(Host.OkWine)) {
-      sendMessageToContent(tabId, {
-        type: MessageType.OkWinePageChanged,
-      });
-    } else if (tab.url.includes(Host.Rozetka)) {
-      sendMessageToContent(tabId, {
-        type: MessageType.RozetkaPageChanged,
-      });
+    let type: MessageType | undefined;
+    if (tab.url.includes(Host.Auchan)) type = MessageType.AuchanPageChanged;
+    else if (tab.url.includes(Host.WineTime)) type = MessageType.WineTimePageChanged;
+    else if (tab.url.includes(Host.GoodWine)) type = MessageType.GoodWinePageChanged;
+    else if (tab.url.includes(Host.OkWine)) type = MessageType.OkWinePageChanged;
+    else if (tab.url.includes(Host.Rozetka)) type = MessageType.RozetkaPageChanged;
+    if (type) {
+      sendMessageToContent(tabId, { type });
     }
   }
 }
 
-function sendMessageToContent(tabId: number, message: IMessage): void {
+function sendMessageToContent(tabId: number, message: Message): void {
   chrome.tabs.sendMessage(tabId, message);
 }
 

@@ -1,6 +1,6 @@
 import { from, Observable, of, zip } from 'rxjs';
 import { concatMap, delay, tap } from 'rxjs/operators';
-import { IWineRating } from '../model/wine-rating.model';
+import { WineRating } from '../models/types.model';
 import { getWineRating } from '../service/message.service';
 import { createGoodWineWineRatingBadge } from '../utils/badge.util';
 import { isGoodWineWineDepartment } from '../utils/store.util';
@@ -33,7 +33,7 @@ const getWineListItems = (): Element[] => {
   return [...Array.from(document.querySelectorAll('.item-root-ER-'))];
 };
 
-const getRating = (wineItem: Element): Observable<IWineRating> => {
+const getRating = (wineItem: Element): Observable<WineRating> => {
   const wineName = wineItem.querySelector('span').textContent ?? '';
   let wineMaker = '';
   const wineItemSpanItems = wineItem.querySelectorAll('span');
@@ -46,7 +46,7 @@ const getRating = (wineItem: Element): Observable<IWineRating> => {
   return getWineRating(wineMaker ? `${wineMaker} ${wineName}` : wineName);
 };
 
-const addRating = (wineItem: Element, wineRating: IWineRating): void => {
+const addRating = (wineItem: Element, wineRating: WineRating): void => {
   if (!wineItem.querySelector(`.${VivinoBadgeRatingClass}`)) {
     const item = wineItem.querySelector('.item-images-1xN');
     const wineRatingBadge = createGoodWineWineRatingBadge(wineRating);

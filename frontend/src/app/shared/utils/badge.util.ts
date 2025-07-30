@@ -1,5 +1,5 @@
 import { VivinoBadgeRatingClass } from '../../app.constants';
-import { IWineRating } from '../model/wine-rating.model';
+import { WineRating } from '../models/types.model';
 
 const getBadgePercentage = (score: number): number => {
   return +((score * 100) / 5).toFixed(2);
@@ -9,7 +9,7 @@ const getBadgeColor = (score: number): string => {
   return score >= 0 && score < 3 ? '#FFAB00' : '#00C853';
 };
 
-const getBadgeHtml = (wineRating: IWineRating): string => {
+const getBadgeHtml = (wineRating: WineRating): string => {
   return `
   <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 5px;">
     <svg viewBox="0 0 36 36" style="height: 30px; width: 30px; stroke: ${getBadgeColor(wineRating.score)};">
@@ -28,7 +28,7 @@ const getBadgeHtml = (wineRating: IWineRating): string => {
   </div>`;
 };
 
-export const createAuchanWineRatingBadge = (wineRating: IWineRating): Element => {
+export const createAuchanWineRatingBadge = (wineRating: WineRating): Element => {
   const badge = document.createElement('div');
   badge.title = `${wineRating.reviewsCount} reviews in Vivino`;
   badge.classList.add(VivinoBadgeRatingClass);
@@ -46,7 +46,7 @@ export const createAuchanWineRatingBadge = (wineRating: IWineRating): Element =>
   return badge;
 };
 
-export const createWineTimeWineRatingBadge = (wineRating: IWineRating): Element => {
+export const createWineTimeWineRatingBadge = (wineRating: WineRating): Element => {
   const badge = document.createElement('div');
   badge.title = `${wineRating.reviewsCount} reviews in Vivino`;
   badge.classList.add(VivinoBadgeRatingClass);
@@ -64,7 +64,7 @@ export const createWineTimeWineRatingBadge = (wineRating: IWineRating): Element 
   return badge;
 };
 
-export const createGoodWineWineRatingBadge = (wineRating: IWineRating): Element => {
+export const createGoodWineWineRatingBadge = (wineRating: WineRating): Element => {
   const badge = document.createElement('div');
   badge.title = `${wineRating.reviewsCount} reviews in Vivino`;
   badge.classList.add(VivinoBadgeRatingClass);
@@ -81,7 +81,7 @@ export const createGoodWineWineRatingBadge = (wineRating: IWineRating): Element 
   return badge;
 };
 
-export const createOkWineWineRatingBadge = (wineRating: IWineRating): Element => {
+export const createOkWineWineRatingBadge = (wineRating: WineRating): Element => {
   const badge = document.createElement('div');
   badge.title = `${wineRating.reviewsCount} reviews in Vivino`;
   badge.classList.add(VivinoBadgeRatingClass);
@@ -98,7 +98,7 @@ export const createOkWineWineRatingBadge = (wineRating: IWineRating): Element =>
   return badge;
 };
 
-export const createRozetkaWineRatingBadge = (wineRating: IWineRating): Element => {
+export const createRozetkaWineRatingBadge = (wineRating: WineRating): Element => {
   const badge = document.createElement('div');
   badge.title = `${wineRating.reviewsCount} reviews in Vivino`;
   badge.classList.add(VivinoBadgeRatingClass);

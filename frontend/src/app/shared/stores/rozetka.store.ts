@@ -1,6 +1,6 @@
 import { EMPTY, from, Observable, of, zip } from 'rxjs';
 import { concatMap, delay, filter, tap } from 'rxjs/operators';
-import { IWineRating } from '../model/wine-rating.model';
+import { WineRating } from '../models/types.model';
 import { getWineRating } from '../service/message.service';
 import { createRozetkaWineRatingBadge } from '../utils/badge.util';
 import { isRozetkaWineDepartment } from '../utils/store.util';
@@ -34,13 +34,13 @@ const getWineListItems = (): Element[] => {
   return [...Array.from(document.querySelectorAll('li[class~="catalog-grid__cell"]'))];
 };
 
-const getRating = (wineItem: Element): Observable<IWineRating> => {
+const getRating = (wineItem: Element): Observable<WineRating> => {
   const wineTitle = wineItem.querySelector('span[class~="goods-tile__title"]').textContent;
   const wineName = getWineName(wineTitle as string);
   return wineName ? getWineRating(wineName) : EMPTY;
 };
 
-const addRating = (wineItem: Element, wineRating: IWineRating): void => {
+const addRating = (wineItem: Element, wineRating: WineRating): void => {
   if (!wineItem.querySelector(`.${VivinoBadgeRatingClass}`)) {
     const item = wineItem.querySelector('.goods-tile__picture');
     const wineRatingBadge = createRozetkaWineRatingBadge(wineRating);

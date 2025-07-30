@@ -1,25 +1,28 @@
 import { fromEventPattern, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { IMessageEvent } from '../model/message-event.model';
-import { IMessage } from '../model/message.model';
-import { IWineRating } from '../model/wine-rating.model';
+import { ChromeMessageEvent } from '../models/types.model';
+import { Message } from '../models/types.model';
+import { WineRating } from '../models/types.model';
 import { VivinoService } from './vivino.service';
 
 const vivinoService = new VivinoService();
 
-export const getWineRating = (wineName: string): Observable<IWineRating> => {
+export const getWineRating = (wineName: string): Observable<WineRating> => {
   return vivinoService.getWineRating(wineName);
 };
 
-export const backgroundMessageListener = fromEventPattern(
+function chromeMessageWrapper(handler: (event: ChromeMessageEvent) => void) {
+  return function (message: Message, sender: chrome.runtime.MessageSender, sendResponse: (response?: any) => void) {
+    const event: ChromeMessageEvent = { async: false, message, sender, sendResponse };
+    handler(event);
+    return event.async;
+  };
+}
+
+export const backgroundMessageListener = fromEventPattern<ChromeMessageEvent>(
   (handler) => {
-    const wrapper = (message: IMessage, sender: chrome.runtime.MessageSender, sendResponse: (response?: any) => void) => {
-      const event = { async: false, message, sender, sendResponse };
-      handler(event);
-      return event.async;
-    };
+    const wrapper = chromeMessageWrapper(handler);
     chrome.runtime.onMessage.addListener(wrapper);
     return wrapper;
   },
-  (handler, wrapper) => chrome.runtime.onMessage.removeListener(wrapper),
-).pipe(map((res) => res as IMessageEvent));
+  (handler, wrapper) => chrome.runtime.onMessage.removeListener(wrapper)
+);

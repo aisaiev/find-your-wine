@@ -1,6 +1,6 @@
 import { EMPTY, from, interval, Observable, of, Subject, zip } from 'rxjs';
 import { concatMap, filter, map, switchMap, takeUntil, takeWhile } from 'rxjs/operators';
-import { IWineRating } from '../model/wine-rating.model';
+import { WineRating } from '../models/types.model';
 import { getWineRating } from '../service/message.service';
 import { createOkWineWineRatingBadge } from '../utils/badge.util';
 import { isOkWineWineDepartment } from '../utils/store.util';
@@ -45,14 +45,14 @@ const getWineListItems = (): Element[] => {
   return Array.from(document.querySelectorAll(WINE_ITEM_CONTAINER_SELECTOR));
 };
 
-const getRating = (wineItem: Element): Observable<IWineRating> => {
+const getRating = (wineItem: Element): Observable<WineRating> => {
   const links = wineItem.querySelectorAll('a');
   const wineTitle = links.item(links.length - 1).firstChild.textContent;
   const wineName = getWineName(wineTitle as string);
   return wineName ? getWineRating(wineName) : EMPTY;
 };
 
-const addRating = (wineItem: Element, wineRating: IWineRating): void => {
+const addRating = (wineItem: Element, wineRating: WineRating): void => {
   if (!wineItem.querySelector(`.${VivinoBadgeRatingClass}`)) {
     const item = wineItem.firstChild.firstChild;
     const wineRatingBadge = createOkWineWineRatingBadge(wineRating);

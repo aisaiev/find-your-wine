@@ -1,6 +1,6 @@
 import { from, Observable, of, zip } from 'rxjs';
 import { concatMap, delay, tap } from 'rxjs/operators';
-import { IWineRating } from '../model/wine-rating.model';
+import { WineRating } from '../models/types.model';
 import { getWineRating } from '../service/message.service';
 import { createAuchanWineRatingBadge } from '../utils/badge.util';
 import { isAuchanWineDepartment } from '../utils/store.util';
@@ -34,13 +34,13 @@ const getWineListItems = (): Element[] => {
   return [...wineListItems];
 };
 
-const getRating = (wineItem: Element): Observable<IWineRating> => {
+const getRating = (wineItem: Element): Observable<WineRating> => {
   const wineTitle = wineItem.querySelector('span[class~="ProductTile__title"]').textContent;
   const wineName = getWineName(wineTitle as string);
   return getWineRating(wineName);
 };
 
-const addRating = (wineItem: Element, wineRating: IWineRating): void => {
+const addRating = (wineItem: Element, wineRating: WineRating): void => {
   if (!wineItem.querySelector(`.${VivinoBadgeRatingClass}`)) {
     const item = wineItem.querySelector('div[data-testid="productTileWeight"]');
     const wineRatingBadge = createAuchanWineRatingBadge(wineRating);
