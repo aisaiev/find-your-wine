@@ -39,13 +39,10 @@ export const isGoodWineWineDepartment = (): boolean => {
 };
 
 export const isOkWineWineDepartment = (): boolean => {
-  return (
-    window.location.host.includes(Host.OkWine) &&
-    (window.location.pathname.includes('vina') ||
-      window.location.pathname.includes('vino') ||
-      window.location.pathname.includes('liker') ||
-      window.location.pathname.includes('-wine'))
-  );
+  if (!window.location.host.includes(Host.OkWine)) return false;
+
+  const winePaths = ['vina', 'vino', '-wine'];
+  return winePaths.some(path => window.location.pathname.includes(path));
 };
 
 export const isRozetkaWineDepartment = (): boolean => {
