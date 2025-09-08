@@ -4,7 +4,7 @@ import { WineRating } from '../models/types.model';
 import { getWineRating } from '../service/message.service';
 import { createWineTimeWineRatingBadge } from '../utils/badge.util';
 import { isWineTimeWineDepartment } from '../utils/store.util';
-import { VivinoBadgeRatingClass } from '../../app.constants';
+import { VIVINO_BAGE_CLASS } from '../../app.constants';
 
 export const addWineTimeWineRating = (): void => {
   if (isWineTimeWineDepartment()) {
@@ -16,7 +16,7 @@ export const addWineTimeWineRating = (): void => {
 
 const addRatings = (): void => {
   const interval = setInterval(() => {
-    const wineListItems = getWineListItems().filter((wineItem) => !wineItem.querySelector(`.${VivinoBadgeRatingClass}`));
+    const wineListItems = getWineListItems().filter((wineItem) => !wineItem.querySelector(`.${VIVINO_BAGE_CLASS}`));
     if (wineListItems.length) {
       clearInterval(interval);
       from(wineListItems)
@@ -46,7 +46,7 @@ const getRating = (wineItem: Element): Observable<WineRating> => {
 };
 
 const addRating = (wineItem: Element, wineRating: WineRating): void => {
-  if (!wineItem.querySelector(`.${VivinoBadgeRatingClass}`)) {
+  if (!wineItem.querySelector(`.${VIVINO_BAGE_CLASS}`)) {
     const item = wineItem.querySelector('.product-micro--image');
     const wineRatingBadge = createWineTimeWineRatingBadge(wineRating);
     item.appendChild(wineRatingBadge);

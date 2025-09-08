@@ -11,7 +11,7 @@
   "content_scripts": [
     {
       "matches": ["*://winetime.com.ua/*", "*://goodwine.com.ua/*", "*://okwine.ua/*", "*://rozetka.com.ua/*"],
-      "js": ["content-script.js", "runtime.js"]
+      "js": ["content-script.js", "runtime.js", "polyfills.js", "main.js"]
     }
   ],
   "icons": {

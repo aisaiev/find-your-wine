@@ -4,12 +4,12 @@ import { WineRating } from '../models/types.model';
 import { getWineRating } from '../service/message.service';
 import { createAuchanWineRatingBadge } from '../utils/badge.util';
 import { isAuchanWineDepartment } from '../utils/store.util';
-import { VivinoBadgeRatingClass } from '../../app.constants';
+import { VIVINO_BAGE_CLASS } from '../../app.constants';
 
 export const addAuchanWineRating = (): void => {
   if (isAuchanWineDepartment()) {
     const interval = setInterval(() => {
-      const wineListItems = getWineListItems().filter((wineItem) => !wineItem.querySelector(`.${VivinoBadgeRatingClass}`));
+      const wineListItems = getWineListItems().filter((wineItem) => !wineItem.querySelector(`.${VIVINO_BAGE_CLASS}`));
       if (wineListItems.length > 0) {
         clearInterval(interval);
         from(wineListItems)
@@ -41,7 +41,7 @@ const getRating = (wineItem: Element): Observable<WineRating> => {
 };
 
 const addRating = (wineItem: Element, wineRating: WineRating): void => {
-  if (!wineItem.querySelector(`.${VivinoBadgeRatingClass}`)) {
+  if (!wineItem.querySelector(`.${VIVINO_BAGE_CLASS}`)) {
     const item = wineItem.querySelector('div[data-testid="productTileWeight"]');
     const wineRatingBadge = createAuchanWineRatingBadge(wineRating);
     item.insertAdjacentElement('afterend', wineRatingBadge);

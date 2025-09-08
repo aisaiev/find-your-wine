@@ -5,7 +5,7 @@ import { addAuchanWineRating } from './app/shared/stores/auchan.store';
 import { addGoodWineWineRating } from './app/shared/stores/good-wine.store';
 import { addRozetkaWineRating } from './app/shared/stores/rozetka.store';
 import { addWineTimeWineRating } from './app/shared/stores/wine-time.store';
-import { addOkWineWineRating } from './app/shared/stores/ok-wine.store';
+import { addOkWineRating } from './app/shared/stores/ok-wine.store';
 
 const initialize = (): void => {
   backgroundMessageListener.pipe(debounceTime(500)).subscribe((event) => {
@@ -20,7 +20,7 @@ const initialize = (): void => {
         addGoodWineWineRating();
         break;
       case MessageType.OkWinePageChanged:
-        addOkWineWineRating();
+        addOkWineRating();
         break;
       case MessageType.RozetkaPageChanged:
         addRozetkaWineRating();

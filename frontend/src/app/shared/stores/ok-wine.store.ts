@@ -2,16 +2,18 @@ import { EMPTY, from, interval, Observable, of, Subject, zip } from 'rxjs';
 import { concatMap, filter, map, switchMap, takeUntil, takeWhile } from 'rxjs/operators';
 import { WineRating } from '../models/types.model';
 import { getWineRating } from '../service/message.service';
-import { createOkWineWineRatingBadge } from '../utils/badge.util';
 import { isOkWineWineDepartment } from '../utils/store.util';
-import { VivinoBadgeRatingClass } from '../../app.constants';
+import { VIVINO_BAGE_CLASS } from '../../app.constants';
+import { createComponent } from '@angular/core';
+import { WineBadgeComponent } from '../../wine-badge/wine-badge.component';
+import { ApplicationRef } from '../../../main';
 
 const WINE_ITEM_CONTAINER_SELECTOR = '[data-testid="integrationProductContainer"]';
 
 const addRatingsUntil$ = new Subject<void>();
 let ratingsObserver: MutationObserver;
 
-export const addOkWineWineRating = (): void => {
+export const addOkWineRating = (): void => {
   addRatingsUntil$.next();
   addRatings().subscribe();
 
@@ -28,7 +30,7 @@ export const addOkWineWineRating = (): void => {
 const addRatings = (): Observable<void> => {
   if (!isOkWineWineDepartment()) return EMPTY;
   return interval().pipe(
-    map(() => getWineListItems().filter((wineItem) => !wineItem.querySelector(`.${VivinoBadgeRatingClass}`))),
+    map(() => getWineListItems().filter((wineItem) => !wineItem.querySelector(`.${VIVINO_BAGE_CLASS}`))),
     takeWhile((wineListItems) => wineListItems.length === 0, true),
     switchMap((wineListItems) => from(wineListItems)),
     concatMap((wineItem) => zip(of(wineItem), getRating(wineItem))),
@@ -53,11 +55,25 @@ const getRating = (wineItem: Element): Observable<WineRating> => {
 };
 
 const addRating = (wineItem: Element, wineRating: WineRating): void => {
-  if (!wineItem.querySelector(`.${VivinoBadgeRatingClass}`)) {
+  if (!wineItem.querySelector(`.${VIVINO_BAGE_CLASS}`)) {
     const item = wineItem.firstChild.firstChild;
-    const wineRatingBadge = createOkWineWineRatingBadge(wineRating);
-    item.appendChild(wineRatingBadge);
+    item.appendChild(createBadgeComponent(wineRating));
   }
+};
+
+const createBadgeComponent = (wineRating: WineRating): HTMLElement => {
+  const container = document.createElement('div');
+  const componentRef = createComponent(WineBadgeComponent, { hostElement: container, environmentInjector: ApplicationRef.injector });
+  componentRef.instance.wineRating.set(wineRating);
+  componentRef.instance.styles.set({
+    position: 'absolute',
+    right: '15px',
+    bottom: '0px',
+    cursor: 'pointer',
+  });
+  ApplicationRef.attachView(componentRef.hostView);
+  componentRef.changeDetectorRef.detectChanges();
+  return container;
 };
 
 const wineReplacements: { from: string; to: string }[] = [

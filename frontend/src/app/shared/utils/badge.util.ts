@@ -1,4 +1,4 @@
-import { VivinoBadgeRatingClass } from '../../app.constants';
+import { VIVINO_BAGE_CLASS } from '../../app.constants';
 import { WineRating } from '../models/types.model';
 
 const getBadgePercentage = (score: number): number => {
@@ -31,7 +31,7 @@ const getBadgeHtml = (wineRating: WineRating): string => {
 export const createAuchanWineRatingBadge = (wineRating: WineRating): Element => {
   const badge = document.createElement('div');
   badge.title = `${wineRating.reviewsCount} reviews in Vivino`;
-  badge.classList.add(VivinoBadgeRatingClass);
+  badge.classList.add(VIVINO_BAGE_CLASS);
   badge.style.position = 'absolute';
   badge.style.right = '0px';
   badge.style.bottom = '0px';
@@ -49,7 +49,7 @@ export const createAuchanWineRatingBadge = (wineRating: WineRating): Element => 
 export const createWineTimeWineRatingBadge = (wineRating: WineRating): Element => {
   const badge = document.createElement('div');
   badge.title = `${wineRating.reviewsCount} reviews in Vivino`;
-  badge.classList.add(VivinoBadgeRatingClass);
+  badge.classList.add(VIVINO_BAGE_CLASS);
   badge.style.position = 'absolute';
   badge.style.right = '10px';
   badge.style.top = '150px';
@@ -67,44 +67,10 @@ export const createWineTimeWineRatingBadge = (wineRating: WineRating): Element =
 export const createGoodWineWineRatingBadge = (wineRating: WineRating): Element => {
   const badge = document.createElement('div');
   badge.title = `${wineRating.reviewsCount} reviews in Vivino`;
-  badge.classList.add(VivinoBadgeRatingClass);
+  badge.classList.add(VIVINO_BAGE_CLASS);
   badge.style.position = 'absolute';
   badge.style.right = '0px';
   badge.style.bottom = '5px';
-  badge.style.cursor = 'pointer';
-  badge.innerHTML = getBadgeHtml(wineRating);
-  badge.addEventListener('click', (event: MouseEvent) => {
-    event.stopPropagation();
-    event.preventDefault();
-    window.open(wineRating.link, '_blank');
-  });
-  return badge;
-};
-
-export const createOkWineWineRatingBadge = (wineRating: WineRating): Element => {
-  const badge = document.createElement('div');
-  badge.title = `${wineRating.reviewsCount} reviews in Vivino`;
-  badge.classList.add(VivinoBadgeRatingClass);
-  badge.style.position = 'absolute';
-  badge.style.right = '15px';
-  badge.style.bottom = '0px';
-  badge.style.cursor = 'pointer';
-  badge.innerHTML = getBadgeHtml(wineRating);
-  badge.addEventListener('click', (event: MouseEvent) => {
-    event.stopPropagation();
-    event.preventDefault();
-    window.open(wineRating.link, '_blank');
-  });
-  return badge;
-};
-
-export const createRozetkaWineRatingBadge = (wineRating: WineRating): Element => {
-  const badge = document.createElement('div');
-  badge.title = `${wineRating.reviewsCount} reviews in Vivino`;
-  badge.classList.add(VivinoBadgeRatingClass);
-  badge.style.position = 'absolute';
-  badge.style.right = '0px';
-  badge.style.bottom = '0px';
   badge.style.cursor = 'pointer';
   badge.innerHTML = getBadgeHtml(wineRating);
   badge.addEventListener('click', (event: MouseEvent) => {

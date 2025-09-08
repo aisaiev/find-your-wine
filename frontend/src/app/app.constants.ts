@@ -18,4 +18,4 @@ export const enum MessageType {
   RozetkaPageChanged = 'RozetkaPageChanged',
 }
 
-export const VivinoBadgeRatingClass = 'vivino-rating';
+export const VIVINO_BAGE_CLASS = 'vivino-rating';
