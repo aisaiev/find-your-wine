@@ -3,12 +3,12 @@ import type { WineDto } from "../providers/dto/wine.dto.js";
 import type { WineRatingProvider } from "../providers/wine-rating-provider.js";
 
 export class VivinoClient implements WineRatingProvider {
-  private static readonly BASE_URL =
+  private readonly BASE_URL =
     "https://9takgwjuxl-dsn.algolia.net/1/indexes/WINES_prod/query?x-algolia-agent=Algolia%20for%20JavaScript%20(3.33.0)%3B%20Browser%20(lite)&x-algolia-application-id=9TAKGWJUXL&x-algolia-api-key=60c11b2f1068885161d95ca068d3a6ae";
 
   async getRating(name: string): Promise<WineDto | null> {
     try {
-      const response = await fetch(VivinoClient.BASE_URL, {
+      const response = await fetch(this.BASE_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
