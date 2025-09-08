@@ -14,6 +14,6 @@ export interface Message {
 export interface WineRating {
   name: string;
   score: number;
-  reviewsCount: number;
+  reviewCount: number;
   link: string;
 }

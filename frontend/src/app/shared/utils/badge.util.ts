@@ -24,13 +24,13 @@ const getBadgeHtml = (wineRating: WineRating): string => {
           a 15.9155 15.9155 0 0 1 0 -31.831"></path>
       <text x="18" y="23" style="font-size: 14px; stroke: #312A29; text-anchor: middle;">${wineRating.score}</text>
     </svg>
-    <span style="font-size: 12px; color: #312A29; text-align: center;">${wineRating.reviewsCount} reviews</span>
+    <span style="font-size: 12px; color: #312A29; text-align: center;">${wineRating.reviewCount} reviews</span>
   </div>`;
 };
 
 export const createAuchanWineRatingBadge = (wineRating: WineRating): Element => {
   const badge = document.createElement('div');
-  badge.title = `${wineRating.reviewsCount} reviews in Vivino`;
+  badge.title = `${wineRating.reviewCount} reviews in Vivino`;
   badge.classList.add(VIVINO_BAGE_CLASS);
   badge.style.position = 'absolute';
   badge.style.right = '0px';
@@ -48,7 +48,7 @@ export const createAuchanWineRatingBadge = (wineRating: WineRating): Element => 
 
 export const createWineTimeWineRatingBadge = (wineRating: WineRating): Element => {
   const badge = document.createElement('div');
-  badge.title = `${wineRating.reviewsCount} reviews in Vivino`;
+  badge.title = `${wineRating.reviewCount} reviews in Vivino`;
   badge.classList.add(VIVINO_BAGE_CLASS);
   badge.style.position = 'absolute';
   badge.style.right = '10px';
@@ -66,7 +66,7 @@ export const createWineTimeWineRatingBadge = (wineRating: WineRating): Element =
 
 export const createGoodWineWineRatingBadge = (wineRating: WineRating): Element => {
   const badge = document.createElement('div');
-  badge.title = `${wineRating.reviewsCount} reviews in Vivino`;
+  badge.title = `${wineRating.reviewCount} reviews in Vivino`;
   badge.classList.add(VIVINO_BAGE_CLASS);
   badge.style.position = 'absolute';
   badge.style.right = '0px';
