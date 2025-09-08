@@ -8,6 +8,13 @@
       "when": 1757321530231,
       "tag": "0000_tough_hawkeye",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1757328564534,
+      "tag": "0001_wooden_rictor",
+      "breakpoints": true
     }
   ]
 }
