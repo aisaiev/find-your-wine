@@ -9,9 +9,25 @@ jobs:
     environment: development
     steps:
       - uses: actions/checkout@v4
-      - run: |
-          docker stop $(docker ps -q --filter ancestor=find-your-wine) || true && docker rm --force find-your-wine || true && docker rmi --force find-your-wine || true
-          docker build . -t find-your-wine --progress=plain
-          docker run -p 3002:3002 --name find-your-wine -d find-your-wine
 
-  
+      - name: Create .env file
+        run: |
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
+          echo "WINE_UPDATE_INTERVAL_MINUTES=${{ secrets.WINE_UPDATE_INTERVAL_MINUTES }}" >> .env
+      
+      - name: Stop and remove container
+        run: |
+          docker stop find-your-wine || true
+          docker rm find-your-wine || true
+      
+      - name: Remove Docker image
+        run: |
+          docker rmi find-your-wine:latest || true
+      
+      - name: Build Docker image
+        run: |
+          docker build -t find-your-wine:latest .
+      
+      - name: Run Docker container
+        run: |
+          docker run -d --name find-your-wine -p 3002:3000 find-your-wine:latest
