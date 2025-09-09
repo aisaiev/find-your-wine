@@ -1,3 +1,5 @@
+export const API_URL = 'https://find-your-wine.aisaiev.net/api/wines';
+
 export const enum Host {
   Auchan = 'auchan.zakaz.ua',
   WineTime = 'winetime.com.ua',
@@ -16,6 +18,9 @@ export const enum MessageType {
   GoodWinePageChanged = 'GoodWinePageChanged',
   OkWinePageChanged = 'OkWinePageChanged',
   RozetkaPageChanged = 'RozetkaPageChanged',
+  GetOkWineInternalData = 'GetOkWineInternalData',
 }
 
 export const VIVINO_BAGE_CLASS = 'vivino-rating';
+
+export const WINE_RESUIDUES_CLASS = 'wine-residues';

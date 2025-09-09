@@ -1,10 +1,12 @@
 import { EMPTY, from, Observable, of, zip } from 'rxjs';
 import { concatMap, delay, tap } from 'rxjs/operators';
-import { WineRating } from '../models/types.model';
-import { getWineRating } from '../service/message.service';
 import { createWineTimeWineRatingBadge } from '../utils/badge.util';
 import { isWineTimeWineDepartment } from '../utils/store.util';
 import { VIVINO_BAGE_CLASS } from '../../app.constants';
+import { WineService } from '../service/wine.service';
+import { WineRating } from '../../models/wine-rating.model';
+
+const wineService = new WineService();
 
 export const addWineTimeWineRating = (): void => {
   if (isWineTimeWineDepartment()) {
@@ -42,7 +44,7 @@ const getWineListItems = (): Element[] => {
 const getRating = (wineItem: Element): Observable<WineRating> => {
   const wineTitle = wineItem.querySelector('.product-micro--title').textContent;
   const wineName = getWineName(wineTitle as string);
-  return wineName ? getWineRating(wineName) : EMPTY;
+  return wineName ? wineService.getWineRating(wineName) : EMPTY;
 };
 
 const addRating = (wineItem: Element, wineRating: WineRating): void => {

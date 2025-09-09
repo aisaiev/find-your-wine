@@ -3,7 +3,7 @@
   "version": "1.0.5",
   "description": "Відображення рейтингів вин з Vivino на сайтах Rozetka, Good Wine, OKWINE та WINETIME.",
   "manifest_version": 3,
-  "permissions": ["tabs"],
+  "permissions": ["tabs", "scripting", "activeTab", "storage"],
   "background": {
     "service_worker": "background.js",
     "type": "module"
@@ -14,6 +14,8 @@
       "js": ["content-script.js", "runtime.js", "polyfills.js", "main.js"]
     }
   ],
+  "host_permissions": ["*://okwine.ua/*"],
+  "options_page": "index.html?page=settings",
   "icons": {
     "128": "assets/img/icon.png"
   }

@@ -1,16 +1,16 @@
 import { Component, computed, signal, HostBinding, HostListener } from '@angular/core';
-import { WineRating } from '../shared/models/types.model';
 import { VIVINO_BAGE_CLASS } from '../app.constants';
+import { WineRating } from '../models/wine-rating.model';
 
 @Component({
-  selector: 'app-wine-badge',
-  templateUrl: './wine-badge.component.html',
-  styleUrl: './wine-badge.component.scss',
+  selector: 'app-wine-rating-badge',
+  templateUrl: './wine-rating-badge.component.html',
+  styleUrl: './wine-rating-badge.component.scss',
   host: {
     class: VIVINO_BAGE_CLASS,
   },
 })
-export class WineBadgeComponent {
+export class WineRatingBadgeComponent {
   wineRating = signal<WineRating>(null);
   styles = signal<Record<string, string>>({});
 

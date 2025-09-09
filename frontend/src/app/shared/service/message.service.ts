@@ -1,14 +1,6 @@
-import { fromEventPattern, Observable } from 'rxjs';
-import { ChromeMessageEvent } from '../models/types.model';
-import { Message } from '../models/types.model';
-import { WineRating } from '../models/types.model';
-import { VivinoService } from './vivino.service';
-
-const vivinoService = new VivinoService();
-
-export const getWineRating = (wineName: string): Observable<WineRating> => {
-  return vivinoService.getWineRating(wineName);
-};
+import { fromEventPattern } from 'rxjs';
+import { ChromeMessageEvent } from '../../models/chrome-message-event.model';
+import { Message } from '../../models/message.model';
 
 function chromeMessageWrapper(handler: (event: ChromeMessageEvent) => void) {
   return function (message: Message, sender: chrome.runtime.MessageSender, sendResponse: (response?: any) => void) {

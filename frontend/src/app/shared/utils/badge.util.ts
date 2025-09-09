@@ -1,5 +1,5 @@
 import { VIVINO_BAGE_CLASS } from '../../app.constants';
-import { WineRating } from '../models/types.model';
+import { WineRating } from '../../models/wine-rating.model';
 
 const getBadgePercentage = (score: number): number => {
   return +((score * 100) / 5).toFixed(2);

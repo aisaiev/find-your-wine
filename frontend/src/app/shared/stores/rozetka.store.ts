@@ -1,17 +1,18 @@
 import { EMPTY, from, interval, Observable, of, Subject, zip } from 'rxjs';
 import { concatMap, filter, map, switchMap, takeUntil, takeWhile } from 'rxjs/operators';
-import { WineRating } from '../models/types.model';
-import { getWineRating } from '../service/message.service';
 import { isRozetkaWineDepartment } from '../utils/store.util';
 import { VIVINO_BAGE_CLASS } from '../../app.constants';
 import { createComponent } from '@angular/core';
-import { WineBadgeComponent } from '../../wine-badge/wine-badge.component';
+import { WineRatingBadgeComponent } from '../../wine-rating-badge/wine-rating-badge.component';
 import { ApplicationRef } from '../../../main';
+import { WineService } from '../service/wine.service';
+import { WineRating } from '../../models/wine-rating.model';
 
 const WINES_CONTAINER_SELECTOR = 'rz-category-goods';
 
 const addRatingsUntil$ = new Subject<void>();
 let ratingsObserver: MutationObserver;
+const wineService = new WineService();
 
 export const addRozetkaWineRating = (): void => {
   addRatingsUntil$.next();
@@ -50,7 +51,7 @@ const getWineListItems = (): Element[] => {
 const getRating = (wineItem: Element): Observable<WineRating> => {
   const wineTitle = wineItem.querySelector('a[class="tile-title black-link text-base').textContent;
   const wineName = getWineName(wineTitle as string);
-  return wineName ? getWineRating(wineName) : EMPTY;
+  return wineName ? wineService.getWineRating(wineName) : EMPTY;
 };
 
 const addRating = (wineItem: Element, wineRating: WineRating): void => {
@@ -62,7 +63,7 @@ const addRating = (wineItem: Element, wineRating: WineRating): void => {
 
 const createBadgeComponent = (wineRating: WineRating): HTMLElement => {
   const container = document.createElement('div');
-  const componentRef = createComponent(WineBadgeComponent, { hostElement: container, environmentInjector: ApplicationRef.injector });
+  const componentRef = createComponent(WineRatingBadgeComponent, { hostElement: container, environmentInjector: ApplicationRef.injector });
   componentRef.instance.wineRating.set(wineRating);
   componentRef.instance.styles.set({
     position: 'absolute',

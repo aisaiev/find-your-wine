@@ -1,10 +1,12 @@
 import { from, Observable, of, zip } from 'rxjs';
 import { concatMap, delay, tap } from 'rxjs/operators';
-import { WineRating } from '../models/types.model';
-import { getWineRating } from '../service/message.service';
 import { createAuchanWineRatingBadge } from '../utils/badge.util';
 import { isAuchanWineDepartment } from '../utils/store.util';
 import { VIVINO_BAGE_CLASS } from '../../app.constants';
+import { WineService } from '../service/wine.service';
+import { WineRating } from '../../models/wine-rating.model';
+
+const wineService = new WineService();
 
 export const addAuchanWineRating = (): void => {
   if (isAuchanWineDepartment()) {
@@ -37,7 +39,7 @@ const getWineListItems = (): Element[] => {
 const getRating = (wineItem: Element): Observable<WineRating> => {
   const wineTitle = wineItem.querySelector('span[class~="ProductTile__title"]').textContent;
   const wineName = getWineName(wineTitle as string);
-  return getWineRating(wineName);
+  return wineService.getWineRating(wineName);
 };
 
 const addRating = (wineItem: Element, wineRating: WineRating): void => {

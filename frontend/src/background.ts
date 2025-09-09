@@ -1,8 +1,10 @@
 import { Host, MessageType, TabStatus } from './app/app.constants';
-import { Message } from './app/shared/models/types.model';
+import { Message } from './app/models/message.model';
+import { getOkWineWinesInternalData } from './app/shared/utils/store.util';
 
 function initialize(): void {
   chrome.tabs.onUpdated.addListener(tabsUpdatedListener);
+  chrome.runtime.onMessage.addListener(messagesListener);
 }
 
 function tabsUpdatedListener(tabId: number, changeInfo: chrome.tabs.TabChangeInfo, tab: chrome.tabs.Tab): void {
@@ -17,6 +19,22 @@ function tabsUpdatedListener(tabId: number, changeInfo: chrome.tabs.TabChangeInf
       sendMessageToContent(tabId, { type });
     }
   }
+}
+
+function messagesListener(message: Message, sender: chrome.runtime.MessageSender, sendResponse: (response?: any) => void): boolean {
+  if (message.type === MessageType.GetOkWineInternalData) {
+    chrome.scripting
+      .executeScript({
+        target: { tabId: sender.tab.id },
+        func: getOkWineWinesInternalData,
+        args: [message['selector']],
+        world: 'MAIN',
+      })
+      .then((response) => {
+        sendResponse(response[0].result);
+      });
+  }
+  return true;
 }
 
 function sendMessageToContent(tabId: number, message: Message): void {
