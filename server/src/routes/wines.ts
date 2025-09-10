@@ -1,12 +1,12 @@
 import { Hono } from "hono";
 import { z } from "zod";
 import { zValidator } from "@hono/zod-validator";
-import { db } from "../db/index.js";
-import { wines as winesTable } from "../db/schema/wines.js";
+import { db } from "../db";
+import { wines as winesTable } from "../db/schema/wines";
 import { eq } from "drizzle-orm";
-import { WineService } from "../services/wine-service.js";
-import type { OkWineResiduesResponse } from "../models/okwine-residues-response.model.js";
-import type { WineResidues } from "../models/wine-residues.model.js";
+import { WineService } from "../services/wine-service";
+import type { OkWineResiduesResponse } from "../models/okwine-residues-response.model";
+import type { WineResidues } from "../models/wine-residues.model";
 import * as cheerio from "cheerio";
 import env from '../env.js';
 

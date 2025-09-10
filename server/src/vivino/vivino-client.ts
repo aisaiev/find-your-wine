@@ -1,6 +1,6 @@
-import type { VivinoResponse } from "./dto/vivino-response.dto.js";
-import type { WineDto } from "../providers/dto/wine.dto.js";
-import type { WineRatingProvider } from "../providers/wine-rating-provider.js";
+import type { VivinoResponse } from "./dto/vivino-response.dto";
+import type { WineDto } from "../providers/dto/wine.dto";
+import type { WineRatingProvider } from "../providers/wine-rating-provider";
 
 export class VivinoClient implements WineRatingProvider {
   private readonly BASE_URL =

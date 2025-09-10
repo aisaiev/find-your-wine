@@ -1,4 +1,4 @@
-import { VivinoClient } from "../vivino/vivino-client.js";
+import { VivinoClient } from "../vivino/vivino-client";
 
 export class WineService {
   private vivino = new VivinoClient();
