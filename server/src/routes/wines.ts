@@ -12,8 +12,6 @@ import { wines as winesTable } from "@/db/schema";
 
 const WINE_UPDATE_INTERVAL_MS = env.WINE_UPDATE_INTERVAL_MINUTES * 60 * 1000;
 
-console.log("Wine update interval (ms):", WINE_UPDATE_INTERVAL_MS);
-
 const WINE_RETURNING_FIELDS = {
   name: winesTable.name,
   reviewCount: winesTable.reviewCount,
