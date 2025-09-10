@@ -8,10 +8,9 @@ import { WineService } from "../services/wine-service.js";
 import type { OkWineResiduesResponse } from "../models/okwine-residues-response.model.js";
 import type { WineResidues } from "../models/wine-residues.model.js";
 import * as cheerio from "cheerio";
-import "dotenv/config";
+import env from '../env.js';
 
-const WINE_UPDATE_INTERVAL_MS =
-  Number(process.env.WINE_UPDATE_INTERVAL_MINUTES!) * 60 * 1000;
+const WINE_UPDATE_INTERVAL_MS = env.WINE_UPDATE_INTERVAL_MINUTES * 60 * 1000;
 
 const WINE_RETURNING_FIELDS = {
   name: winesTable.name,
