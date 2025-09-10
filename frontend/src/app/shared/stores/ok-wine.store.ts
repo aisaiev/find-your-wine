@@ -1,7 +1,7 @@
 import { EMPTY, from, merge, Observable, of, Subject } from 'rxjs';
 import { delay, filter, map, mergeMap, switchMap, takeUntil, takeWhile, tap } from 'rxjs/operators';
 import { isOkWineWineDepartment } from '../utils/store.util';
-import { MessageType, VIVINO_BAGE_CLASS, WINE_RESUIDUES_CLASS } from '../../app.constants';
+import { MessageType, VIVINO_BAGE_CLASS, WINE_RESIDUES_CLASS } from '../../app.constants';
 import { createComponent } from '@angular/core';
 import { WineRatingBadgeComponent } from '../../wine-rating-badge/wine-rating-badge.component';
 import { ApplicationRef } from '../../../main';
@@ -116,7 +116,7 @@ const addRating = (wineItem: Element, wineRating: WineRating): void => {
 };
 
 const addResidues = (wineItem: Element, wineResidues: WineResidues): void => {
-  if (!wineItem.querySelector(`.${WINE_RESUIDUES_CLASS}`)) {
+  if (!wineItem.querySelector(`.${WINE_RESIDUES_CLASS}`)) {
     const item = wineItem.firstChild.firstChild;
     item.appendChild(createWineResiduesBadgeComponent(wineResidues));
   }

@@ -23,4 +23,4 @@ export const enum MessageType {
 
 export const VIVINO_BAGE_CLASS = 'vivino-rating';
 
-export const WINE_RESUIDUES_CLASS = 'wine-residues';
+export const WINE_RESIDUES_CLASS = 'wine-residues';
