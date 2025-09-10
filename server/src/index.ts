@@ -6,7 +6,12 @@ import winesRoute from "@/routes/wines";
 
 const app = new Hono();
 
-app.use("*", logger(), cors());
+const corsMiddleware = cors({
+  origin: ["https://okwine.ua", "https://find-your-wine.aisaiev.net"],
+  allowMethods: ["GET", "POST", "OPTIONS"],
+});
+
+app.use("*", logger(), corsMiddleware);
 
 const api = app.basePath("/api");
 
