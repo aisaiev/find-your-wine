@@ -7,11 +7,11 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 
-export const wines = pgTable("wines", {
+const wines = pgTable("wines", {
   id: serial().primaryKey(),
   name: varchar({ length: 255 }).notNull(),
   reviewCount: integer().notNull(),
-  score: numeric({ mode: 'number' }).notNull(),
+  score: numeric({ mode: "number" }).notNull(),
   link: varchar({ length: 255 }).notNull(),
   searchTerm: varchar({ length: 100 }).notNull(),
   createdAt: timestamp().defaultNow().notNull(),
@@ -20,3 +20,5 @@ export const wines = pgTable("wines", {
     .notNull()
     .$onUpdate(() => new Date()),
 });
+
+export default wines;

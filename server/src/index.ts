@@ -1,8 +1,8 @@
 import { serve } from "@hono/node-server";
 import { Hono } from "hono";
 import { logger } from "hono/logger";
-import { winesRoute } from "./routes/wines";
-import { cors } from 'hono/cors';
+import { cors } from "hono/cors";
+import winesRoute from "@/routes/wines";
 
 const app = new Hono();
 
