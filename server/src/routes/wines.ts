@@ -91,10 +91,7 @@ api.get(
       const wine = wines[0];
       const now = new Date();
       if (now.getTime() - wine.updatedAt.getTime() > WINE_UPDATE_INTERVAL_MS) {
-        const freshWine = await wineService.getWineRating(
-          name,
-          getRandomInt(100, 500)
-        );
+        const freshWine = await wineService.getWineRating(name);
         if (freshWine) {
           const [updatedWine] = await db
             .update(winesTable)
@@ -112,7 +109,7 @@ api.get(
       });
     }
 
-    const wine = await wineService.getWineRating(name, getRandomInt(100, 500));
+    const wine = await wineService.getWineRating(name);
 
     if (wine) {
       const [createdWine] = await db
@@ -195,9 +192,5 @@ api.get(
     }
   }
 );
-
-const getRandomInt = (min: number, max: number): number => {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-};
 
 export default api;
