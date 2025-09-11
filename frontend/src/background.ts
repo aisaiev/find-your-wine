@@ -1,6 +1,6 @@
-import { Host, MessageType, TabStatus } from './app/app.constants';
-import { Message } from './app/models/message.model';
-import { getOkWineWinesInternalData } from './app/shared/utils/store.util';
+import { Host, TabStatus, WineStore } from './app/app.constants';
+import { Message } from './app/models/message';
+import { getOkwineInternalData } from './app/shared/utils/store.util';
 
 function initialize(): void {
   chrome.tabs.onUpdated.addListener(tabsUpdatedListener);
@@ -8,25 +8,29 @@ function initialize(): void {
 }
 
 function tabsUpdatedListener(tabId: number, changeInfo: chrome.tabs.TabChangeInfo, tab: chrome.tabs.Tab): void {
-  if (changeInfo.status === TabStatus.Complete) {
-    let type: MessageType | undefined;
-    if (tab.url.includes(Host.Auchan)) type = MessageType.AuchanPageChanged;
-    else if (tab.url.includes(Host.WineTime)) type = MessageType.WineTimePageChanged;
-    else if (tab.url.includes(Host.GoodWine)) type = MessageType.GoodWinePageChanged;
-    else if (tab.url.includes(Host.OkWine)) type = MessageType.OkWinePageChanged;
-    else if (tab.url.includes(Host.Rozetka)) type = MessageType.RozetkaPageChanged;
-    if (type) {
-      sendMessageToContent(tabId, { type });
-    }
+  if (changeInfo.status !== TabStatus.Complete || !tab.url) return;
+
+  const hostTypeMap: { [key: string]: WineStore } = {
+    [Host.Auchan]: WineStore.Auchan,
+    [Host.WineTime]: WineStore.WineTime,
+    [Host.GoodWine]: WineStore.GoodWine,
+    [Host.OkWine]: WineStore.OkWine,
+    [Host.Rozetka]: WineStore.Rozetka,
+  };
+
+  const store = Object.entries(hostTypeMap).find(([host]) => tab.url.includes(host))?.[1];
+
+  if (store) {
+    chrome.tabs.sendMessage<Message>(tabId, { type: 'WineStoreLoaded', store });
   }
 }
 
 function messagesListener(message: Message, sender: chrome.runtime.MessageSender, sendResponse: (response?: any) => void): boolean {
-  if (message.type === MessageType.GetOkWineInternalData) {
+  if (message.type === 'GetOkwineInternalData') {
     chrome.scripting
       .executeScript({
         target: { tabId: sender.tab.id },
-        func: getOkWineWinesInternalData,
+        func: getOkwineInternalData,
         args: [message['selector']],
         world: 'MAIN',
       })
@@ -35,10 +39,6 @@ function messagesListener(message: Message, sender: chrome.runtime.MessageSender
       });
   }
   return true;
-}
-
-function sendMessageToContent(tabId: number, message: Message): void {
-  chrome.tabs.sendMessage(tabId, message);
 }
 
 initialize();

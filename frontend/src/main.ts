@@ -15,4 +15,4 @@ bootstrapApplication(AppComponent, appConfig).then((appRef) => {
   applicationRef = appRef;
 });
 
-export { applicationRef as ApplicationRef };
+export { applicationRef };

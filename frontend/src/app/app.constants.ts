@@ -12,13 +12,12 @@ export const enum TabStatus {
   Complete = 'complete',
 }
 
-export const enum MessageType {
-  AuchanPageChanged = 'AuchanPageChanged',
-  WineTimePageChanged = 'WineTimePageChanged',
-  GoodWinePageChanged = 'GoodWinePageChanged',
-  OkWinePageChanged = 'OkWinePageChanged',
-  RozetkaPageChanged = 'RozetkaPageChanged',
-  GetOkWineInternalData = 'GetOkWineInternalData',
+export const enum WineStore {
+  Auchan = 'auchan',
+  WineTime = 'winetime',
+  GoodWine = 'goodwine',
+  OkWine = 'okwine',
+  Rozetka = 'rozetka',
 }
 
 export const VIVINO_BAGE_CLASS = 'vivino-rating';

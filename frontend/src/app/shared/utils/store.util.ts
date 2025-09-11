@@ -1,5 +1,5 @@
 import { Host } from '../../app.constants';
-import { OkWineInternalData } from '../../models/okwine.model';
+import { OkWineInternalData } from '../../models/okwine';
 
 export const isAuchanWineDepartment = (): boolean => {
   return window.location.host.includes(Host.Auchan) && window.location.pathname.includes('wine');
@@ -50,15 +50,15 @@ export const isRozetkaWineDepartment = (): boolean => {
   return window.location.host.includes(Host.Rozetka) && window.location.pathname.includes('vino');
 };
 
-export const getOkWineWinesInternalData = (selector: string): OkWineInternalData[] => {
+export const getOkwineInternalData = (selector: string): OkWineInternalData[] => {
   const element = document.querySelector(`.${selector.split(' ').join('.')}`);
   const reactFiber = Object.keys(element).find((key) => key.startsWith('__reactFiber'));
   const domFiber = element[reactFiber];
   const data = domFiber.memoizedProps.children[0].map((child) => {
-    const key = child.key;
+    const id = child.props.product.id;
     const pr_id = child.props.product.pr_id;
     const utp = child.props.product.utp;
-    return { key, pr_id, utp };
+    return { id, pr_id, utp };
   });
   return data;
 };

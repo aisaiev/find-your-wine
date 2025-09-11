@@ -2,31 +2,42 @@
     <h2>Налаштування</h2>
     <div class="card">
         <h5 class="card-header">OKWINE</h5>
-        <div class="card-body">
-            <h6 class="card-title">Маркет за замовчуванням</h6>
-            <form [formGroup]="okwineForm" (ngSubmit)="onSubmitOkwineForm()">
-                <div class="mb-3">
-                    <label for="okwineCity" class="form-label">Місто</label>
-                    <select id="okwineCity" class="form-select" formControlName="cityId" name="cityId">
-                        @for (city of okwineCities(); track city.oid) {
-                            <option [value]="city.oid">{{ city.name }}</option>
+        <div class="card-body d-flex flex-column justify-content-center" style="min-height: 260px;">
+            @if (!isLoadingCities()) {
+                <h6 class="card-title">Маркет за замовчуванням</h6>
+                <form [formGroup]="okwineForm" (ngSubmit)="onSubmitOkwineForm()">
+                    <div class="mb-3">
+                        <label for="okwineCity" class="form-label">Місто</label>
+                        <select id="okwineCity" class="form-select" formControlName="cityId" name="cityId">
+                            @for (city of okwineCities(); track city.oid) {
+                                <option [value]="city.oid">{{ city.name }}</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="okwineMarket" class="form-label">Маркет</label>
+                        <select id="okwineMarket" class="form-select" formControlName="marketId" name="marketId">
+                            @for (market of okwineMarkets(); track market.oid) {
+                                <option [value]="market.oid">{{ market.address }}</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input type="checkbox" id="okwineShowResidues" class="form-check-input" formControlName="showResidues" name="showResidues" />
+                        <label for="okwineShowResidues" class="form-check-label">Показувати залишки</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary" [disabled]="okwineForm.invalid || isSaving()">
+                        @if(isSaving()) {
+                            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
                         }
-                    </select>
+                        Зберегти
+                    </button>
+                </form>
+            } @else {
+                <div class="w-100 d-flex justify-content-center align-items-center flex-grow-1" style="min-height: 120px;">
+                    <span class="spinner-border text-secondary" style="width: 3rem; height: 3rem;" aria-hidden="true"></span>
                 </div>
-                <div class="mb-3">
-                    <label for="okwineMarket" class="form-label">Маркет</label>
-                    <select id="okwineMarket" class="form-select" formControlName="marketId" name="marketId">
-                        @for (market of okwineMarkets(); track market.oid) {
-                            <option [value]="market.oid">{{ market.address }}</option>
-                        }
-                    </select>
-                </div>
-                <div class="form-check mb-3">
-                    <input type="checkbox" id="okwineShowResidues" class="form-check-input" formControlName="showResidues" name="showResidues" />
-                    <label for="okwineShowResidues" class="form-check-label">Показувати залишки</label>
-                </div>
-                <button type="submit" class="btn btn-primary" [disabled]="okwineForm.invalid">Зберегти</button>
-            </form>
+            }
         </div>
     </div>
 </div>

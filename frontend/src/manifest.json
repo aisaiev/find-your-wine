@@ -1,7 +1,7 @@
 {
   "name": "Find Your Wine",
   "version": "1.0.6",
-  "description": "Відображення рейтингів вин з Vivino на сайтах Rozetka, Good Wine, OKWINE та WINETIME.",
+  "description": "Відображення рейтингів вин з Vivino на сайтах Rozetka, Good Wine, OKWINE, WINETIME, Auchan",
   "manifest_version": 3,
   "permissions": ["tabs", "scripting", "activeTab", "storage"],
   "background": {
@@ -10,12 +10,12 @@
   },
   "content_scripts": [
     {
-      "matches": ["*://winetime.com.ua/*", "*://goodwine.com.ua/*", "*://okwine.ua/*", "*://rozetka.com.ua/*"],
-      "js": ["content-script.js", "runtime.js", "polyfills.js", "main.js"]
+      "matches": ["*://winetime.com.ua/*", "*://goodwine.com.ua/*", "*://okwine.ua/*", "*://rozetka.com.ua/*", "*://auchan.zakaz.ua/*"],
+      "js": ["runtime.js", "polyfills.js", "main.js"]
     }
   ],
   "host_permissions": ["*://okwine.ua/*"],
-  "options_page": "index.html?page=settings",
+  "options_page": "index.html?app-page=settings",
   "icons": {
     "128": "assets/img/icon.png"
   }

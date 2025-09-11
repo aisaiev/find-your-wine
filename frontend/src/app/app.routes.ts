@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 import { SettingsComponent } from './settings/settings.component';
-import { AppComponent } from './app.component';
-import { CustomRouting } from './custom-routing';
+import { RedirectComponent } from './components/redirect/redirect.component';
 
 export const routes: Routes = [
   {
@@ -10,7 +9,6 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    component: AppComponent,
-    canActivate: [CustomRouting],
+    component: RedirectComponent,
   },
 ];

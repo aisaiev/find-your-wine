@@ -1,5 +1,5 @@
 export interface OkWineInternalData {
-  key: string;
+  id: string;
   pr_id: string;
   utp: string;
 }
