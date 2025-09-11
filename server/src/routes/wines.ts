@@ -159,7 +159,10 @@ api.get("okwine/cities", async (c) => {
     const $ = cheerio.load(res);
     const jsonText = $("#__NEXT_DATA__").html();
     const data = okwineCitiesSchema.parse(JSON.parse(jsonText!));
-    return c.json(data.props.pageProps.hydrationData.headerStore.city);
+    const cities = data.props.pageProps.hydrationData.headerStore.city.sort(
+      (a, b) => a.name.localeCompare(b.name)
+    );
+    return c.json(cities);
   } catch (error) {
     return c.json({ error: "Failed to fetch okwine cities data" }, 500);
   }
