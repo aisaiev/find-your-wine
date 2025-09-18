@@ -4,16 +4,16 @@ const path = require('path');
 const indexPath = path.join(__dirname, '../dist/find-your-wine/index.html');
 let html = fs.readFileSync(indexPath, 'utf8');
 
-// Видалити всі <style>...</style>
+// Remove all <style>...</style>
 html = html.replace(/<style[\s\S]*?<\/style>/gi, '');
 
-// Видалити всі <noscript>...</noscript>
+// Remove all <noscript>...</noscript>
 html = html.replace(/<noscript[\s\S]*?<\/noscript>/gi, '');
 
-// Видалити всі <link rel="stylesheet" ...>
+// Remove all <link rel="stylesheet" ...>
 html = html.replace(/<link\s+rel=["']stylesheet["'][^>]*?>/gi, '');
 
-// Додати <link rel="stylesheet" href="styles.css"> перед </head>
+// Add <link rel="stylesheet" href="styles.css"> before </head>
 html = html.replace(
   /<\/head>/i,
   '  <link rel="stylesheet" href="styles.css">\n</head>'
