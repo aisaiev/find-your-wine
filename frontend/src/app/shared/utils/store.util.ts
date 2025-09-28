@@ -51,14 +51,22 @@ export const isRozetkaWineDepartment = (): boolean => {
 };
 
 export const getOkwineInternalData = (selector: string): OkWineInternalData[] => {
-  const element = document.querySelector(`.${selector.split(' ').join('.')}`);
-  const reactFiber = Object.keys(element).find((key) => key.startsWith('__reactFiber'));
-  const domFiber = element[reactFiber];
-  const data = domFiber.memoizedProps.children[0].map((child) => {
-    const id = child.props.product.id;
-    const pr_id = child.props.product.pr_id;
-    const utp = child.props.product.utp;
-    return { id, pr_id, utp };
-  });
-  return data;
+  const classSelector = `.${selector.trim().split(/\s+/).join('.')}`;
+  const element = document.querySelector(classSelector);
+  if (!element) return [];
+
+  const reactFiberKey = Object.keys(element).find((key) => key.startsWith('__reactFiber'));
+  if (!reactFiberKey) return [];
+
+  const domFiber = element[reactFiberKey];
+  if (!domFiber?.memoizedProps?.children || !Array.isArray(domFiber.memoizedProps.children)) return [];
+
+  return domFiber.memoizedProps.children
+    .map((child: any) => child?.props?.product)
+    .filter((product: any) => product && product.id && product.pr_id && product.utp)
+    .map((product: any) => ({
+      id: product.id,
+      pr_id: product.pr_id,
+      utp: product.utp,
+    }));
 };

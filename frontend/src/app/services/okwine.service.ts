@@ -47,7 +47,11 @@ export class OkwineService implements WineStoreService {
         forkJoin({
           settings: this.settingsService.get('okwineSettings'),
           winesInternalData: this.getWinesInternalData(tableSelector),
-        })
+        }).pipe(tap((data) => {
+          if (!data.winesInternalData.length) {
+            console.warn('OkWine internal data is empty');
+          }
+        })),
       ),
       switchMap(({ settings, winesInternalData }) => {
         return from(wineItems).pipe(
@@ -57,7 +61,7 @@ export class OkwineService implements WineStoreService {
           }),
           tap(({ wineItem, wineInternalData }) => {
             this.addRatingBadge(wineItem);
-            if (settings?.showResidues) {
+            if (settings?.showResidues && wineInternalData) {
               this.addResiduesBadge(wineItem, {
                 type: 'okwine',
                 data: { cityId: settings.cityId, marketId: settings.marketId, data: wineInternalData },
