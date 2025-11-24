@@ -30,4 +30,4 @@ jobs:
       
       - name: Run Docker container
         run: |
-          docker run -d --name find-your-wine -p 3002:3000 find-your-wine:latest
+          docker run -d --name find-your-wine -p 3002:3000 --restart unless-stopped find-your-wine:latest
