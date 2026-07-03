@@ -1,5 +1,4 @@
-// export const API_URL = 'https://find-your-wine.aisaiev.net/api/wines';
-export const API_URL = 'http://localhost:3000/api/wines';
+export const API_URL = 'https://find-your-wine.aisaiev.net/api/wines';
 
 export const enum Host {
   Auchan = 'auchan.zakaz.ua',
