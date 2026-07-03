@@ -1,6 +1,6 @@
 {
   "name": "Find Your Wine",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Відображення рейтингів вин з Vivino на сайтах Rozetka, Good Wine, OKWINE, WINETIME, Auchan",
   "manifest_version": 3,
   "permissions": ["tabs", "scripting", "activeTab", "storage"],
