@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { WineService } from '../services/wine.service';
 import { delay, filter, switchMap, take, tap } from 'rxjs';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -11,6 +11,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   selector: 'app-settings',
   imports: [ReactiveFormsModule],
   templateUrl: './settings.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './settings.component.scss',
 })
 export class SettingsComponent implements OnInit {

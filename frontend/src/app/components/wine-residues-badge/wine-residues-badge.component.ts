@@ -1,4 +1,4 @@
-import { Component, effect, HostBinding, inject, signal } from '@angular/core';
+import { Component, effect, HostBinding, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { WINE_RESIDUES_CLASS } from '../../app.constants';
 import { WineResidues } from '../../models/wine-residues';
 import { WineService } from '../../services/wine.service';
@@ -9,6 +9,7 @@ import { take, tap } from 'rxjs';
   selector: 'app-wine-residues-badge',
   templateUrl: './wine-residues-badge.component.html',
   styleUrl: './wine-residues-badge.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     class: WINE_RESIDUES_CLASS,
   },

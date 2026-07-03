@@ -6,5 +6,15 @@
     "types": ["chrome"]
   },
   "files": ["src/main.ts", "src/background.ts"],
-  "include": ["src/**/*.d.ts"]
+  "include": [
+    "src/**/*.d.ts"
+  ],
+  "angularCompilerOptions": {
+    "extendedDiagnostics": {
+      "checks": {
+        "nullishCoalescingNotNullable": "suppress",
+        "optionalChainNotNullable": "suppress"
+      }
+    }
+  }
 }
