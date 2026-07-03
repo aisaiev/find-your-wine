@@ -1,4 +1,4 @@
-import { Component, computed, signal, HostBinding, HostListener, inject, effect, ChangeDetectionStrategy } from '@angular/core';
+import { Component, computed, signal, HostBinding, HostListener, inject, effect } from '@angular/core';
 import { VIVINO_BAGE_CLASS } from '../../app.constants';
 import { WineRating } from '../../models/wine-rating';
 import { WineService } from '../../services/wine.service';
@@ -8,7 +8,6 @@ import { take, tap } from 'rxjs';
   selector: 'app-wine-rating-badge',
   templateUrl: './wine-rating-badge.component.html',
   styleUrl: './wine-rating-badge.component.scss',
-  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     class: VIVINO_BAGE_CLASS,
   },
