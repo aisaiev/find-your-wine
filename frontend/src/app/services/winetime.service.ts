@@ -4,10 +4,7 @@ import { map, takeUntil, tap } from 'rxjs/operators';
 import { isWineTimeWineDepartment } from '../shared/utils/store.util';
 import { VIVINO_BAGE_CLASS } from '../app.constants';
 import { normalizeWineName } from '../shared/utils/wine-name.util';
-import { createComponent } from '@angular/core';
-import { WineRatingBadgeComponent } from '../components/wine-rating-badge/wine-rating-badge.component';
 import { WineStoreService } from './contract/wine-store-service';
-import { applicationRef } from '../../main';
 import { BadgeService } from './badge.service';
 
 @Injectable({

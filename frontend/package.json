@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build && node scripts/cleanup-html.js",
+    "build": "ng build && node scripts/compile-background.js && node scripts/cleanup-html.js",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
@@ -25,7 +25,6 @@
     "zone.js": "~0.15.1"
   },
   "devDependencies": {
-    "@angular-builders/custom-webpack": "^22.0.1",
     "@angular/build": "^22.0.5",
     "@angular/cli": "^22.0.5",
     "@angular/compiler-cli": "^22.0.5",
