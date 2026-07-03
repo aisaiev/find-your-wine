@@ -60,7 +60,7 @@ export class OkwineService implements WineStoreService {
             return { wineItem, wineInternalData };
           }),
           tap(({ wineItem, wineInternalData }) => {
-            this.addRatingBadge(wineItem);
+            this.addRatingBadge(wineItem, wineInternalData);
             if (settings?.showResidues && wineInternalData) {
               this.addResiduesBadge(wineItem, {
                 type: 'okwine',
@@ -76,7 +76,7 @@ export class OkwineService implements WineStoreService {
   }
 
   private getWineItemInternalData(wineItem: Element, data: OkWineInternalData[]): OkWineInternalData {
-    const utp = wineItem.querySelector('[data-testid="integrationProductUtp"]').textContent;
+    const utp = wineItem.querySelector('[data-testid="integrationProductUtp"]')?.textContent;
     return data.find((d) => d.utp === utp);
   }
 
@@ -95,20 +95,23 @@ export class OkwineService implements WineStoreService {
 
   private getWineName(wineItem: Element): string {
     const links = wineItem.querySelectorAll('a');
-    let wineTitle = links.item(links.length - 1).firstChild.textContent;
+    const wineTitle = links.item(links.length - 1)?.firstChild?.textContent?.trim() ?? '';
     return normalizeWineName(wineTitle);
   }
 
-  private addRatingBadge(wineItem: Element): void {
+  private addRatingBadge(wineItem: Element, internalData?: OkWineInternalData): void {
     if (!wineItem.querySelector(`.${VIVINO_BAGE_CLASS}`)) {
+      const productId = internalData?.id ?? '';
       const wineName = this.getWineName(wineItem);
+      if (!wineName) return;
       const item = wineItem.firstChild.firstChild;
       item.appendChild(
-        this.badgeService.createWineRatingBadgeComponent(wineName, {
+        this.badgeService.createWineRatingBadgeComponent({ market: 'okwine', productId, name: wineName }, {
           position: 'absolute',
           right: '15px',
           bottom: '0px',
           cursor: 'pointer',
+          'z-index': '1',
         })
       );
     }

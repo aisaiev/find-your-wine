@@ -1,7 +1,7 @@
 import { Component, computed, signal, HostBinding, HostListener, inject, effect } from '@angular/core';
 import { VIVINO_BAGE_CLASS } from '../../app.constants';
 import { WineRating } from '../../models/wine-rating';
-import { WineService } from '../../services/wine.service';
+import { WineService, type MarketRatingQuery } from '../../services/wine.service';
 import { take, tap } from 'rxjs';
 
 @Component({
@@ -15,28 +15,36 @@ import { take, tap } from 'rxjs';
 export class WineRatingBadgeComponent {
   private readonly wineService = inject(WineService);
 
-  readonly wineName = signal<string>(null);
+  readonly query = signal<MarketRatingQuery>(null);
   readonly styles = signal<Record<string, string>>({});
   readonly wineRating = signal<WineRating>(null);
 
   readonly badgeColor = computed(() => {
+    if (!this.wineRating()) return '#ccc';
     return this.wineRating().score >= 0 && this.wineRating().score < 3 ? '#FFAB00' : '#00C853';
   });
 
   readonly badgePercentage = computed(() => {
+    if (!this.wineRating()) return 0;
     return +((this.wineRating().score * 100) / 5).toFixed(2);
+  });
+
+  readonly isLowConfidence = computed(() => {
+    return this.wineRating()?.confidence === 'low';
   });
 
   @HostBinding('style')
   get hostStyles() {
-    return this.styles();
+    return { ...this.styles(), opacity: this.isLowConfidence() ? '0.5' : '1' };
   }
 
   @HostListener('click', ['$event'])
   onHostClick(event: MouseEvent) {
     event.stopPropagation();
     event.preventDefault();
-    window.open(this.wineRating().link, '_blank');
+    if (this.wineRating()?.link) {
+      window.open(this.wineRating().link, '_blank');
+    }
   }
 
   constructor() {
@@ -44,9 +52,10 @@ export class WineRatingBadgeComponent {
   }
 
   private getWineRating() {
-    if (!this.wineName()) return;
+    const q = this.query();
+    if (!q) return;
     this.wineService
-      .getWineRating(this.wineName())
+      .getMarketRating(q)
       .pipe(
         take(1),
         tap((rating) => this.wineRating.set(rating))

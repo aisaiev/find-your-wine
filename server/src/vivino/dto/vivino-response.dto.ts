@@ -5,6 +5,7 @@ export interface VivinoResponse {
 interface VivinoItem {
   vintages: VivinoVintage[];
   statistics: VivinoStatistics;
+  _rankingInfo?: RankingInfo;
 }
 
 interface VivinoVintage {
@@ -15,4 +16,8 @@ interface VivinoVintage {
 interface VivinoStatistics {
   ratings_average: number;
   ratings_count: number;
+}
+
+interface RankingInfo {
+  nbExactWords: number;
 }

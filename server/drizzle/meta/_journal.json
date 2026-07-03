@@ -15,6 +15,13 @@
       "when": 1757328564534,
       "tag": "0001_wooden_rictor",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1757400000000,
+      "tag": "0002_lively_black_panther",
+      "breakpoints": true
     }
   ]
 }

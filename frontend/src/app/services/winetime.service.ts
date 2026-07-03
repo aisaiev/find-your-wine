@@ -47,17 +47,23 @@ export class WinetimeService implements WineStoreService {
     return Array.from(document.querySelector(this.WINES_CONTAINER_SELECTOR).children);
   }
 
-  private getWineName(wineItem: Element): string {
-    const wineTitle = wineItem.querySelector('.product-micro--title').textContent;
-    return normalizeWineName(wineTitle);
+  private getProductId(wineItem: Element): string {
+    return wineItem.querySelector('[data-productkey]')?.getAttribute('data-productkey') ?? '';
+  }
+
+  private getRawWineName(wineItem: Element): string {
+    return wineItem.querySelector('.product-micro--title')?.textContent?.trim() ?? '';
   }
 
   private addRatingBadge(wineItem: Element): void {
     if (!wineItem.querySelector(`.${VIVINO_BAGE_CLASS}`)) {
-      const wineName = this.getWineName(wineItem);
+      const productId = this.getProductId(wineItem);
+      const rawName = this.getRawWineName(wineItem);
+      const wineName = normalizeWineName(rawName);
+      if (!wineName) return;
       const item = wineItem.querySelector('.product-micro--image');
       item.appendChild(
-        this.badgeService.createWineRatingBadgeComponent(wineName, {
+        this.badgeService.createWineRatingBadgeComponent({ market: 'winetime', productId, name: wineName }, {
           position: 'absolute',
           right: '10px',
           top: '170px',

@@ -1,26 +1,15 @@
 import { Hono } from "hono";
 import { z } from "zod";
 import { zValidator } from "@hono/zod-validator";
-import { eq } from "drizzle-orm";
 import { WineService } from "@/services/wine-service";
 import type { OkWineResiduesResponse } from "@/models/okwine-residues-response.model";
 import type { WineResidues } from "@/models/wine-residues.model";
 import * as cheerio from "cheerio";
-import env from "@/env";
-import db from "@/db";
-import { wines as winesTable } from "@/db/schema";
 
-const WINE_UPDATE_INTERVAL_MS = env.WINE_UPDATE_INTERVAL_MINUTES * 60 * 1000;
-
-const WINE_RETURNING_FIELDS = {
-  name: winesTable.name,
-  reviewCount: winesTable.reviewCount,
-  score: winesTable.score,
-  link: winesTable.link,
-};
-
-const wineQuerySchema = z.object({
-  name: z.string().min(3).max(100),
+const ratingQuerySchema = z.object({
+  market: z.string().min(1).max(50),
+  productId: z.string().min(1).max(255),
+  name: z.string().min(1).max(200),
 });
 
 const residuesQuerySchema = z.object({
@@ -70,53 +59,24 @@ const wineService = new WineService();
 
 const api = new Hono();
 
-api.get(
-  "/",
-  zValidator("query", wineQuerySchema, (result, c) => {
+api.post(
+  "/rating",
+  zValidator("json", ratingQuerySchema, (result, c) => {
     if (!result.success) {
       return c.json({ error: "Bad Request" }, 400);
     }
   }),
   async (c) => {
-    const result = c.req.valid("query");
-    const { name } = result;
-
-    const wines = await db
-      .select()
-      .from(winesTable)
-      .where(eq(winesTable.searchTerm, name))
-      .limit(1);
-
-    if (wines.length) {
-      const wine = wines[0];
-      const now = new Date();
-      if (now.getTime() - wine.updatedAt.getTime() > WINE_UPDATE_INTERVAL_MS) {
-        const freshWine = await wineService.getWineRating(name);
-        if (freshWine) {
-          const [updatedWine] = await db
-            .update(winesTable)
-            .set(freshWine)
-            .where(eq(winesTable.id, wine.id))
-            .returning(WINE_RETURNING_FIELDS);
-          return c.json(updatedWine);
-        }
-      }
+    const { market, productId, name } = c.req.valid("json");
+    const wine = await wineService.getWineRatingByProduct(market, productId, name);
+    if (wine) {
       return c.json({
         name: wine.name,
-        reviewCount: wine.reviewCount,
         score: wine.score,
+        reviewCount: wine.reviewCount,
         link: wine.link,
+        confidence: wine.confidence,
       });
-    }
-
-    const wine = await wineService.getWineRating(name);
-
-    if (wine) {
-      const [createdWine] = await db
-        .insert(winesTable)
-        .values(wine)
-        .returning(WINE_RETURNING_FIELDS);
-      return c.json(createdWine);
     }
     return c.json({ error: "Wine not found", name }, 404);
   }

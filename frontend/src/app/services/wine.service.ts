@@ -8,6 +8,12 @@ import { WineResidues } from '../models/wine-residues';
 import { OkWineResiduesQuery } from '../models/okwine-residues-query';
 import { OkwineResiduesCacheService } from './okwine-residues-cache.service';
 
+export interface MarketRatingQuery {
+  market: string;
+  productId: string;
+  name: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -15,8 +21,8 @@ export class WineService {
   private readonly httpClient = inject(HttpClient);
   private readonly okWineResiduesCache = inject(OkwineResiduesCacheService);
 
-  getWineRating(wineName: string): Observable<WineRating> {
-    return this.httpClient.get<WineRating>(`${API_URL}?name=${encodeURIComponent(wineName)}`).pipe(catchError(() => of(null)));
+  getMarketRating(query: MarketRatingQuery): Observable<WineRating> {
+    return this.httpClient.post<WineRating>(`${API_URL}/rating`, query).pipe(catchError(() => of(null)));
   }
 
   getOkWineResidues(data: OkWineResiduesQuery): Observable<WineResidues> {

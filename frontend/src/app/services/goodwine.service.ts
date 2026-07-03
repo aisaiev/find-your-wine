@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
-import { EMPTY, from, Observable, Subject } from 'rxjs';
-import { map, takeUntil, tap } from 'rxjs/operators';
+import { EMPTY, from, Observable, of, Subject } from 'rxjs';
+import { delay, map, takeUntil, tap } from 'rxjs/operators';
 import { isGoodWineWineDepartment } from '../shared/utils/store.util';
 import { VIVINO_BAGE_CLASS } from '../app.constants';
 import { normalizeWineName } from '../shared/utils/wine-name.util';
@@ -12,7 +12,7 @@ import { BadgeService } from './badge.service';
 })
 export class GoodwineService implements WineStoreService {
   private badgeService = inject(BadgeService);
-  private WINES_CONTAINER_SELECTOR = '.gallery-items-33P';
+  private WINES_CONTAINER_SELECTOR = 'ul.products-items';
   private addRatingsUntil$ = new Subject<void>();
   private ratingsObserver: MutationObserver;
 
@@ -21,14 +21,14 @@ export class GoodwineService implements WineStoreService {
     if (!item) return;
 
     this.addRatingsUntil$.next();
-    this.addRatings().subscribe();
+    of(null).pipe(delay(1000), tap(() => this.addRatings().subscribe())).subscribe();
 
     this.ratingsObserver?.disconnect();
     this.ratingsObserver = new MutationObserver(() => {
       this.addRatingsUntil$.next();
-      this.addRatings().subscribe();
+      of(null).pipe(delay(2000), tap(() => this.addRatings().subscribe())).subscribe();
     });
-    this.ratingsObserver.observe(item, { childList: true });
+    this.ratingsObserver.observe(item, { childList: true, subtree: true });
   }
 
   private addRatings(): Observable<void> {
@@ -47,28 +47,36 @@ export class GoodwineService implements WineStoreService {
     return Array.from(document.querySelector(this.WINES_CONTAINER_SELECTOR).children);
   }
 
-  private getWineName(wineItem: Element): string {
-    const wineName = wineItem.querySelector('span').textContent ?? '';
-    let wineMaker = '';
-    const wineItemSpanItems = wineItem.querySelectorAll('span');
-    if (wineItemSpanItems.length > 0) {
-      const spanAnchors = wineItemSpanItems[wineItemSpanItems.length - 2].querySelectorAll('a');
-      if (spanAnchors.length > 0) {
-        wineMaker = spanAnchors[spanAnchors.length - 1].textContent.replace('\t', '').replace('/', '').trim();
+  private getProductId(wineItem: Element): string {
+    return wineItem.querySelector('form[data-product-id]')?.getAttribute('data-product-id') ?? '';
+  }
+
+  private getRawWineName(wineItem: Element): string {
+    const nameEl = wineItem.querySelector('.product-item-link');
+    const wineName = nameEl?.textContent?.trim() ?? '';
+    const producerSpans = wineItem.querySelectorAll('.text-xsm span');
+    let producer = '';
+    for (const span of producerSpans) {
+      const text = span.textContent?.trim();
+      if (text && text !== '·' && text !== ',') {
+        producer = text;
       }
     }
-    return normalizeWineName(wineMaker ? `${wineMaker} ${wineName}` : wineName);
+    return producer ? `${producer} ${wineName}` : wineName;
   }
 
   private addRatingBadge(wineItem: Element): void {
     if (!wineItem.querySelector(`.${VIVINO_BAGE_CLASS}`)) {
-      const wineName = this.getWineName(wineItem);
-      const item = wineItem.querySelector('.item-images-1xN');
+      const productId = this.getProductId(wineItem);
+      const rawName = this.getRawWineName(wineItem);
+      const wineName = normalizeWineName(rawName);
+      if (!wineName) return;
+      const item = wineItem.querySelector('.product-info');
+      if (!item) return;
       item.appendChild(
-        this.badgeService.createWineRatingBadgeComponent(wineName, {
+        this.badgeService.createWineRatingBadgeComponent({ market: 'goodwine', productId, name: wineName }, {
           position: 'absolute',
           right: '0px',
-          bottom: '0px',
           cursor: 'pointer',
         })
       );

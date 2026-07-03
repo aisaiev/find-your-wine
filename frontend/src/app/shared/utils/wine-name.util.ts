@@ -1,62 +1,83 @@
-const wineReplacements: { from: string; to: string }[] = [
-  { from: 'вино', to: '' },
-  { from: 'ігристе', to: '' },
-  { from: 'игристое', to: '' },
-  { from: 'sparkling', to: '' },
-  { from: 'червоне', to: '' },
-  { from: 'червоний', to: '' },
-  { from: 'красное', to: '' },
-  { from: 'біле', to: '' },
-  { from: 'білий', to: '' },
-  { from: 'рожеве', to: '' },
-  { from: 'рожевий', to: '' },
-  { from: 'розовое', to: '' },
-  { from: 'коричневий', to: '' },
-  { from: 'бурштинове', to: '' },
-  { from: 'напівсухе', to: '' },
-  { from: 'полусухое', to: 'semi-dry' },
-  { from: 'сухе', to: '' },
-  { from: 'сухое', to: '' },
-  { from: 'напівсолодке', to: '' },
-  { from: 'полусладкое ', to: '' },
-  { from: 'солодкий', to: '' },
-  { from: 'солодке', to: '' },
-  { from: 'десертне', to: '' },
-  { from: 'десертное ', to: '' },
-  { from: 'кріплене', to: '' },
-  { from: 'крепленое', to: '' },
-  { from: 'брют', to: '' },
-  { from: 'екстра', to: '' },
-  { from: 'шираз', to: 'shiraz' },
-  { from: 'шардоне', to: 'chardonnay' },
-  { from: 'каберне', to: 'cabernet' },
-  { from: 'совіньон', to: 'sauvignon' },
-  { from: 'совиньон', to: 'sauvignon' },
-  { from: 'пино', to: 'pinot' },
-  { from: 'піно', to: 'pinot' },
-  { from: 'гри', to: 'grigio' },
-  { from: 'грі', to: 'grigio' },
-];
+const cyrillicToLatin: Record<string, string> = {
+  а: 'a', б: 'b', в: 'v', г: 'h', ґ: 'g', д: 'd', е: 'e', є: 'ie',
+  ж: 'zh', з: 'z', и: 'y', і: 'i', ї: 'i', й: 'i', к: 'k', л: 'l',
+  м: 'm', н: 'n', о: 'o', п: 'p', р: 'r', с: 's', т: 't', у: 'u',
+  ф: 'f', х: 'kh', ц: 'ts', ч: 'ch', ш: 'sh', щ: 'shch', ь: '',
+  ю: 'iu', я: 'ia',
+  ё: 'e', ъ: '', э: 'e', ы: 'y',
+};
 
-const applyWineReplacements = (title: string): string => {
-  let result = title.toLowerCase();
-  wineReplacements.forEach(({ from, to }) => {
-    result = result.replaceAll(from, to);
-  });
-  return result;
+const transliterate = (text: string): string => {
+  return text
+    .toLowerCase()
+    .split('')
+    .map((ch) => cyrillicToLatin[ch] ?? ch)
+    .join('');
+};
+
+const descriptorSet = new Set([
+  'вино', 'ігристе', 'игристое', 'sparkling',
+  'червоне', 'червоний', 'красное',
+  'біле', 'білий',
+  'рожеве', 'рожевий', 'розовое',
+  'коричневий', 'бурштинове',
+  'напівсухе', 'полусухое', 'напівсолодке', 'полусладкое',
+  'сухе', 'сухое', 'солодкий', 'солодке',
+  'десертне', 'десертное', 'кріплене', 'крепленое',
+  'брют', 'екстра',
+]);
+
+const stripDescriptors = (tokens: string[]): string[] => {
+  return tokens.filter((t) => !descriptorSet.has(t));
 };
 
 export const normalizeWineName = (wineTitle: string): string => {
   if (!wineTitle) return '';
 
-  const [, secondPart] = wineTitle.split(' / ');
-  const titleToNormalize = secondPart || wineTitle;
+  const parts = wineTitle.split(' / ');
+  const titleToNormalize = parts.length > 1 ? pickBestPart(parts) : wineTitle;
 
-  const replaced = applyWineReplacements(titleToNormalize);
+  const cleaned = titleToNormalize
+    .toLowerCase()
+    .replace(/[°%@()«»"',.\-\\/]/g, ' ')
+    .replace(/\d+\s*[лм%]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
 
-  const matches = replaced
-    .trim()
-    .match(/([a-z]{2,})|([а-яґєії]{2,})/gi);
+  const tokens = cleaned.split(/\s+/).filter((t) => t.length >= 2);
+  const filtered = stripDescriptors(tokens);
 
-  return matches ? matches.join(' ').trim() : '';
+  if (!filtered.length) return '';
+
+  const latinTokens: string[] = [];
+  const cyrillicTokens: string[] = [];
+
+  for (const token of filtered) {
+    if (/^[a-z]+$/.test(token)) {
+      latinTokens.push(token);
+    } else if (/^[а-яґєії]+$/.test(token)) {
+      cyrillicTokens.push(token);
+    }
+  }
+
+  if (!latinTokens.length && cyrillicTokens.length) {
+    return cyrillicTokens.map(transliterate).join(' ');
+  }
+
+  if (cyrillicTokens.length) {
+    const transliterated = cyrillicTokens.map(transliterate);
+    return [...latinTokens, ...transliterated].join(' ');
+  }
+
+  return latinTokens.join(' ');
+};
+
+const pickBestPart = (parts: string[]): string => {
+  const latinCounts = parts.map((p) => {
+    const cleaned = p.toLowerCase().replace(/[°%@()«»"',.\-\\/]/g, ' ');
+    const tokens = cleaned.split(/\s+/);
+    return tokens.filter((t) => /^[a-z]+$/.test(t) && t.length >= 2).length;
+  });
+  const maxIdx = latinCounts.indexOf(Math.max(...latinCounts));
+  return parts[maxIdx];
 };

@@ -3,4 +3,5 @@ export interface WineRating {
   score: number;
   reviewCount: number;
   link: string;
+  confidence?: 'high' | 'low';
 }

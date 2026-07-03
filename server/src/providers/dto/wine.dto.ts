@@ -4,4 +4,5 @@ export interface WineDto {
   reviewCount: number;
   link: string;
   searchTerm: string;
+  confidence: "high" | "low";
 }
