@@ -46,6 +46,22 @@ export const isOkWineWineDepartment = (): boolean => {
   return winePaths.some((path) => window.location.pathname.includes(path));
 };
 
+const wineNameKeywords = [
+  'вино', 'вина', 'вермут', 'ігристе', 'игристое', 'шампанське',
+  'просеко', 'портвейн', 'мадера', 'херес', 'сидр', 'саке',
+  'мартіні', 'martini', 'столове', 'молоде', 'кріплене', 'десертне',
+  'виноградне', 'бургундське', 'бордо',
+  'wine', 'cava', 'chardonnay', 'cabernet', 'merlot', 'pinot',
+  'sauvignon', 'riesling', 'malbec', 'syrah', 'rose',
+  'піно', 'rouge', 'blanc',
+];
+
+export const isWineProductName = (title: string): boolean => {
+  if (!title) return false;
+  const lower = title.toLowerCase();
+  return wineNameKeywords.some((kw) => lower.includes(kw));
+};
+
 export const isRozetkaWineDepartment = (): boolean => {
   return window.location.host.includes(Host.Rozetka) && window.location.pathname.includes('vino');
 };

@@ -35,7 +35,7 @@ export class WineRatingBadgeComponent {
 
   @HostBinding('style')
   get hostStyles() {
-    return { ...this.styles(), opacity: this.isLowConfidence() ? '0.5' : '1' };
+    return { ...this.styles()};
   }
 
   @HostListener('click', ['$event'])
