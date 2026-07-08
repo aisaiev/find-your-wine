@@ -26,9 +26,9 @@ const wines = pgTable(
       .notNull()
       .$onUpdate(() => new Date()),
   },
-  (table) => ({
-    marketProductIdx: uniqueIndex("market_product_idx").on(table.market, table.productId),
-  })
+  (table) => [
+    uniqueIndex("market_product_idx").on(table.market, table.productId),
+  ]
 );
 
 export default wines;
