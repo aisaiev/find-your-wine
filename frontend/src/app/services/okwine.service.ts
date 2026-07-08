@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { EMPTY, from, Observable, of, Subject, forkJoin } from 'rxjs';
 import { delay, map, switchMap, takeUntil, tap } from 'rxjs/operators';
-import { isOkWineWineDepartment } from '../shared/utils/store.util';
+import { isWineProductName } from '../shared/utils/store.util';
 import { VIVINO_BAGE_CLASS, WINE_RESIDUES_CLASS } from '../app.constants';
 import { OkWineInternalData } from '../models/okwine';
 import { Message } from '../models/message';
@@ -10,6 +10,8 @@ import { WineResiduesQuery } from '../models/wine-residues-query';
 import { normalizeWineName } from '../shared/utils/wine-name.util';
 import { WineStoreService } from './contract/wine-store-service';
 import { BadgeService } from './badge.service';
+
+const LOG_PREFIX = '[OKWINE]';
 
 @Injectable({
   providedIn: 'root',
@@ -37,9 +39,11 @@ export class OkwineService implements WineStoreService {
   }
 
   private addRatings(delayMs: number, tableSelector: string): Observable<void> {
-    if (!isOkWineWineDepartment()) return EMPTY;
+    const wineItems = this.getWineListItems()
+      .filter((wineItem) => !wineItem.querySelector(`.${VIVINO_BAGE_CLASS}`))
+      .filter((wineItem) => isWineProductName(this.getRawWineName(wineItem)));
 
-    const wineItems = this.getWineListItems().filter((wineItem) => !wineItem.querySelector(`.${VIVINO_BAGE_CLASS}`));
+    if (!wineItems.length) return EMPTY;
 
     return of(null).pipe(
       delay(delayMs),
@@ -48,8 +52,8 @@ export class OkwineService implements WineStoreService {
           settings: this.settingsService.get('okwineSettings'),
           winesInternalData: this.getWinesInternalData(tableSelector),
         }).pipe(tap((data) => {
-          if (!data.winesInternalData.length) {
-            console.warn('OkWine internal data is empty');
+          if (!data.winesInternalData?.length) {
+            console.log(LOG_PREFIX, 'internal data is empty');
           }
         })),
       ),
@@ -83,7 +87,7 @@ export class OkwineService implements WineStoreService {
   private getWinesInternalData(selector: string): Observable<OkWineInternalData[]> {
     return new Observable((observer) => {
       chrome.runtime.sendMessage<Message>({ type: 'GetOkwineInternalData', selector }, (response: OkWineInternalData[]) => {
-        observer.next(response);
+        observer.next(response ?? []);
         observer.complete();
       });
     });
@@ -93,10 +97,13 @@ export class OkwineService implements WineStoreService {
     return Array.from(document.querySelectorAll(this.WINE_ITEM_CONTAINER_SELECTOR));
   }
 
-  private getWineName(wineItem: Element): string {
+  private getRawWineName(wineItem: Element): string {
     const links = wineItem.querySelectorAll('a');
-    const wineTitle = links.item(links.length - 1)?.firstChild?.textContent?.trim() ?? '';
-    return normalizeWineName(wineTitle);
+    return links.item(links.length - 1)?.firstChild?.textContent?.trim() ?? '';
+  }
+
+  private getWineName(wineItem: Element): string {
+    return normalizeWineName(this.getRawWineName(wineItem));
   }
 
   private addRatingBadge(wineItem: Element, internalData?: OkWineInternalData): void {
